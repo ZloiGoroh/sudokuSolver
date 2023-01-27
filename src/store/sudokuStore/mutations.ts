@@ -27,6 +27,9 @@ const mutations: MutationTree<ISudokuState> = {
 		}
 		state.cellsMap = newMap;
 	},
+	remakeMap(state, newMap: ISudokuState["cellsMap"]) {
+		state.cellsMap = newMap;
+	},
 };
 
 export default mutations;

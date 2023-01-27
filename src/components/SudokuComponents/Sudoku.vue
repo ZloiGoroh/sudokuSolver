@@ -6,6 +6,7 @@
 			emitValue
 			:options="sizeOptions" />
 		<SudokuGrid :sudokuSize="currentSize" />
+		<button @click="countIteration">Начать всё это грязное дело</button>
 	</div>
 </template>
 
@@ -44,7 +45,7 @@ export default {
 		...mapState("SudokuStore", ["subgridSize"]),
 	},
 	methods: {
-		...mapActions("SudokuStore", ["updateGridSize"]),
+		...mapActions("SudokuStore", ["updateGridSize", "countIteration"]),
 	},
 	created() {
 		this.updateGridSize(this.subgridSize);

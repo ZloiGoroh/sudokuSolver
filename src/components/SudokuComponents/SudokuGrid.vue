@@ -2,7 +2,7 @@
 	<div
 		class="SudokuGrid"
 		:style="{ '--items-in-row': maximumCount }">
-		<template v-for="(sudokuRow, index) in allItems">
+		<template v-for="(sudokuRow, index) in allRows">
 			<div
 				v-for="(_, idx) in sudokuRow"
 				class="Sudoku-cell"
@@ -29,7 +29,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters("SudokuStore", ["allItems", "maximumCount"]),
+		...mapGetters("SudokuStore", ["allRows", "maximumCount"]),
 	},
 	methods: {},
 };

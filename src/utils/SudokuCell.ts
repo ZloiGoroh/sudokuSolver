@@ -13,12 +13,13 @@ export class SudokuCell {
 	}
 
 	// If only one possible value, set it
-	public checkPossibleValues() {
+	public checkPossibleValues(): SudokuCell {
 		if (this._possibleValues.size === 1) {
 			this._possibleValues.forEach((el) => {
 				this.currentValue = el;
 			});
 		}
+		return this.getCopyValue();
 	}
 
 	public setCurrentValue(newValue: number | string): SudokuCell {
@@ -32,7 +33,7 @@ export class SudokuCell {
 
 	public removeImpossibleValue(deletedValue: number) {
 		this._possibleValues.delete(deletedValue);
-		this.checkPossibleValues();
+		return this.checkPossibleValues();
 	}
 
 	private getCopyValue(): SudokuCell {

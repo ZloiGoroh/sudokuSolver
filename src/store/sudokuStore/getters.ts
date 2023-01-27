@@ -18,8 +18,16 @@ const getters: GetterTree<ISudokuState, ISudokuState> = {
 		return (x: number, y: number) =>
 			state.cellsMap.get(getCellCoords(x, y));
 	},
+	allValuesSet(state, getters) {
+		return getters.allItems.every(
+			(cell: SudokuCell) => !!cell.currentValue
+		);
+	},
+	allItems(state) {
+		return [...state.cellsMap.values()];
+	},
 	// Массив из строк
-	allItems(state, getters) {
+	allRows(state, getters) {
 		let rows: SudokuCell[][] = [];
 		getters.maxCountIterate((i: number) => {
 			let cells: SudokuCell[] = [];
@@ -50,17 +58,13 @@ const getters: GetterTree<ISudokuState, ISudokuState> = {
 		getters.maxCountIterate((subGridCounter: number) => {
 			let subGridCol = subGridCounter % state.subgridSize;
 			let subGridRow = Math.floor(subGridCounter / state.subgridSize);
-			if (!subGrids[subGridCol]) {
-				subGrids[subGridCol] = [];
-			}
+			subGrids[subGridCol] ||= [];
 			subGrids[subGridCol][subGridRow] = [];
 			// колонка ряд элементов подблока
 			getters.maxCountIterate((cellCounter: number) => {
 				let cellCol = cellCounter % state.subgridSize;
 				let cellRow = Math.floor(cellCounter / state.subgridSize);
-				if (!subGrids[subGridCol][subGridRow][cellCol]) {
-					subGrids[subGridCol][subGridRow][cellCol] = [];
-				}
+				subGrids[subGridCol][subGridRow][cellCol] ||= [];
 				subGrids[subGridCol][subGridRow][cellCol][cellRow] =
 					getters.getCellByCoords(
 						state.subgridSize * subGridCol + cellCol,
@@ -69,6 +73,28 @@ const getters: GetterTree<ISudokuState, ISudokuState> = {
 			});
 		});
 		return subGrids;
+	},
+	getRowByCoords(state, getters) {
+		return (row: number) => getters.allRows[row];
+	},
+	getColByCoords(state, getters) {
+		return (column: number) => getters.allColumns[column];
+	},
+	getSubGridByCoords(state, getters) {
+		return (x: number, y: number): SudokuCell[] => {
+			return getters.allSubGrids[Math.floor(x / state.subgridSize)][
+				Math.floor(y / state.subgridSize)
+			].flat();
+		};
+	},
+	getGroupByCoords(state, getters) {
+		return (x: number, y: number) => {
+			return [
+				...getters.getRowByCoords(y),
+				...getters.getColByCoords(x),
+				...getters.getSubGridByCoords(x, y),
+			];
+		};
 	},
 };
 
