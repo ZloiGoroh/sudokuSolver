@@ -1,0 +1,9 @@
+{
+  "tabWidth": 4,
+  "useTabs": true,
+  "trailingComma": "es5",
+  "vueIndentScriptAndStyle": false,
+  "singleAttributePerLine": true,
+  "endOfLine":"auto",
+  "bracketSameLine": true
+}
