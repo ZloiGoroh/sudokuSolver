@@ -26,4 +26,9 @@ body {
 	color: #2c3e50;
 	height: 100vh;
 }
+.common-grid {
+	display: grid;
+	grid-template-columns: repeat(var(--items-in-row), 1fr);
+	grid-template-rows: repeat(var(--items-in-row), 1fr);
+}
 </style>

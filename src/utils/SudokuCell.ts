@@ -18,6 +18,7 @@ export class SudokuCell {
 			this._possibleValues.forEach((el) => {
 				this.currentValue = el;
 			});
+			this.emptySet();
 		}
 		return this.getCopyValue();
 	}
@@ -25,8 +26,10 @@ export class SudokuCell {
 	public setCurrentValue(newValue: number | string): SudokuCell {
 		if (newValue > 0 && newValue <= this._maximumElement) {
 			this.currentValue = Number(newValue);
+			this.emptySet();
 		} else if (String(newValue).length < String(this.currentValue).length) {
 			this.currentValue = newValue;
+			this.emptySet();
 		}
 		return this.getCopyValue();
 	}
@@ -38,5 +41,9 @@ export class SudokuCell {
 
 	private getCopyValue(): SudokuCell {
 		return Object.assign(new SudokuCell(this._maximumElement), this);
+	}
+
+	private emptySet() {
+		this._possibleValues = new Set();
 	}
 }

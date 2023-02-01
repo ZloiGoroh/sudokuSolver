@@ -1,5 +1,5 @@
 import { MutationTree } from "vuex";
-import { ISudokuState } from "@/store/sudokuStore/types";
+import { ISudokuState, TCellCoordinates } from "@/store/sudokuStore/types";
 import { IUpdateCellPayload } from "@/store/sudokuStore/types";
 import { getCellCoords } from "@/store/sudokuStore/helpers";
 import { SudokuCell } from "@/utils/SudokuCell";
@@ -29,6 +29,19 @@ const mutations: MutationTree<ISudokuState> = {
 	},
 	remakeMap(state, newMap: ISudokuState["cellsMap"]) {
 		state.cellsMap = newMap;
+	},
+	setBlockedItems(state, isBlocked: boolean) {
+		state.blocked = isBlocked;
+	},
+	setHoveredCoords(
+		state,
+		payload: { x: number; y: number } | TCellCoordinates | ""
+	) {
+		if (typeof payload === "object") {
+			state.hoveredItem = getCellCoords(payload.x, payload.y);
+		} else {
+			state.hoveredItem = payload;
+		}
 	},
 };
 

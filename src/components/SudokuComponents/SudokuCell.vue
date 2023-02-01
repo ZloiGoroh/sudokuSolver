@@ -1,5 +1,7 @@
 <template>
-	<div class="sudoku-grid-cell">
+	<div
+		class="sudoku-grid-cell"
+		@mouseenter="setHoveredCoords({ x: xCoordinate, y: yCoordinate })">
 		<input
 			type="text"
 			:disabled="disabled"
@@ -9,7 +11,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 import { getCellCoords } from "@/store/sudokuStore/helpers";
 
 export default {
@@ -35,6 +37,7 @@ export default {
 	},
 	methods: {
 		...mapActions("SudokuStore", ["setCellValue"]),
+		...mapMutations("SudokuStore", ["setHoveredCoords"]),
 		inputCallback(evt) {
 			this.setValue(evt.target.value);
 		},

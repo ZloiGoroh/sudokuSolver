@@ -13,6 +13,7 @@ const actions: ActionTree<ISudokuState, ISudokuState> = {
 		commit("updateMap", payload);
 	},
 	countIteration({ state, getters, commit }) {
+		commit("setBlockedItems", true);
 		let newMap: ISudokuState["cellsMap"] = new Map();
 		state.cellsMap.forEach((value: SudokuCell, key: TCellCoordinates) => {
 			if (value.currentValue) {
@@ -34,6 +35,10 @@ const actions: ActionTree<ISudokuState, ISudokuState> = {
 			newMap.set(key, updatedCell);
 		});
 		commit("remakeMap", newMap);
+	},
+	resetGrid({ commit }) {
+		commit("setCellsMap");
+		commit("setBlockedItems", false);
 	},
 };
 

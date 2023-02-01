@@ -10,4 +10,6 @@ export type TCellCoordinates = `X:${number}/Y:${number}`;
 export interface ISudokuState {
 	cellsMap: Map<TCellCoordinates, SudokuCell>;
 	subgridSize: number;
+	blocked: boolean;
+	hoveredItem: TCellCoordinates | "";
 }
