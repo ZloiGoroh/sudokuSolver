@@ -7,4 +7,5 @@ export const state: ISudokuState = {
 	subgridSize: startSubgridSize,
 	blocked: false,
 	hoveredItem: "",
+	focusedItem: "",
 };

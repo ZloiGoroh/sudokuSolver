@@ -12,4 +12,5 @@ export interface ISudokuState {
 	subgridSize: number;
 	blocked: boolean;
 	hoveredItem: TCellCoordinates | "";
+	focusedItem: TCellCoordinates | "";
 }

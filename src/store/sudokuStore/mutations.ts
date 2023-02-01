@@ -43,6 +43,16 @@ const mutations: MutationTree<ISudokuState> = {
 			state.hoveredItem = payload;
 		}
 	},
+	setFocusedCoords(
+		state,
+		payload: { x: number; y: number } | TCellCoordinates | ""
+	) {
+		if (typeof payload === "object") {
+			state.focusedItem = getCellCoords(payload.x, payload.y);
+		} else {
+			state.focusedItem = payload;
+		}
+	},
 };
 
 export default mutations;

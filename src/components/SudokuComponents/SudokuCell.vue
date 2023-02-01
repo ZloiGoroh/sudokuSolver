@@ -4,14 +4,19 @@
 		@mouseenter="setHoveredCoords({ x: xCoordinate, y: yCoordinate })">
 		<input
 			type="text"
+			ref="cellInput"
 			:disabled="disabled"
 			v-model="inputValue"
+			@keydown.up="cellRefocus('up')"
+			@keydown.down="cellRefocus('down')"
+			@keydown.right="cellRefocus('right')"
+			@keydown.left="cellRefocus('left')"
 			@input="inputCallback" />
 	</div>
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from "vuex";
+import { mapActions, mapGetters, mapMutations, mapState } from "vuex";
 import { getCellCoords } from "@/store/sudokuStore/helpers";
 
 export default {
@@ -37,7 +42,10 @@ export default {
 	},
 	methods: {
 		...mapActions("SudokuStore", ["setCellValue"]),
-		...mapMutations("SudokuStore", ["setHoveredCoords"]),
+		...mapMutations("SudokuStore", [
+			"setHoveredCoords",
+			"setFocusedCoords",
+		]),
 		inputCallback(evt) {
 			this.setValue(evt.target.value);
 		},
@@ -48,9 +56,50 @@ export default {
 				y: this.yCoordinate,
 			});
 		},
+		getNewFocusedCoordinate(newCoordinate) {
+			return Math.min(this.maximumCount, Math.max(newCoordinate, 0));
+		},
+		cellRefocus(direction) {
+			switch (direction) {
+				case "up":
+					return this.setFocusedCoords({
+						x: this.getNewFocusedCoordinate(this.xCoordinate - 1),
+						y: this.yCoordinate,
+					});
+				case "down":
+					return this.setFocusedCoords({
+						x: this.getNewFocusedCoordinate(this.xCoordinate + 1),
+						y: this.yCoordinate,
+					});
+				case "right":
+					if (
+						this.$refs.cellInput.selectionStart ===
+						String(this.inputValue).length
+					) {
+						this.setFocusedCoords({
+							x: this.xCoordinate,
+							y: this.getNewFocusedCoordinate(
+								this.yCoordinate + 1
+							),
+						});
+					}
+					return;
+				case "left":
+					if (this.$refs.cellInput.selectionStart === 0) {
+						this.setFocusedCoords({
+							x: this.xCoordinate,
+							y: this.getNewFocusedCoordinate(
+								this.yCoordinate - 1
+							),
+						});
+					}
+					return;
+			}
+		},
 	},
 	computed: {
-		...mapState("SudokuStore", ["cellsMap"]),
+		...mapState("SudokuStore", ["cellsMap", "focusedItem"]),
+		...mapGetters("SudokuStore", ["maximumCount"]),
 		currentValue() {
 			return this.cellItem?.currentValue;
 		},
@@ -63,6 +112,11 @@ export default {
 	watch: {
 		cellItem(nv) {
 			this.inputValue = nv.currentValue;
+		},
+		focusedItem(nv) {
+			if (nv === getCellCoords(this.xCoordinate, this.yCoordinate)) {
+				this.$refs.cellInput.focus();
+			}
 		},
 	},
 };
