@@ -72,6 +72,9 @@ export default {
 						y: this.yCoordinate,
 					});
 				case "right":
+					console.log(this.$refs.cellInput.selectionStart);
+					console.log(String(this.inputValue).length);
+					console.log(this.inputValue);
 					if (
 						this.$refs.cellInput.selectionStart ===
 						String(this.inputValue).length
@@ -111,7 +114,7 @@ export default {
 	},
 	watch: {
 		cellItem(nv) {
-			this.inputValue = nv.currentValue;
+			this.inputValue = nv?.currentValue || "";
 		},
 		focusedItem(nv) {
 			if (nv === getCellCoords(this.xCoordinate, this.yCoordinate)) {

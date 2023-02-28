@@ -13,7 +13,7 @@ const mutations: MutationTree<ISudokuState> = {
 		let newMap: ISudokuState["cellsMap"] = new Map();
 		for (let i = 0; i < currentSize; ++i) {
 			for (let j = 0; j < currentSize; ++j) {
-				newMap.set(getCellCoords(i, j), new SudokuCell(currentSize));
+				newMap.set(getCellCoords(j, i), new SudokuCell(currentSize));
 			}
 		}
 		state.cellsMap = newMap;
